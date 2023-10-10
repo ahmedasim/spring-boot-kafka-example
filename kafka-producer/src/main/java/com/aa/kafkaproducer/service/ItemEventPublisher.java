@@ -38,7 +38,7 @@ public class ItemEventPublisher {
 		CompletableFuture<SendResult<String, Object>> future = kt.send("kafka-producer", msg);
         future.whenComplete((result,ex)->{
             if (ex == null) {
-                System.out.println("Sent message=[" + msg +"] with offset=[" + result.getRecordMetadata().offset() + "]");
+                System.out.println("Sent message=[" + msg +"] with offset=[" + result.getRecordMetadata().offset() + "] and partition=[" + result.getRecordMetadata().partition() + "]");
             } else {
                 System.out.println("Unable to send message=[" + msg + "] due to : " + ex.getMessage());
             }
