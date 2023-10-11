@@ -9,6 +9,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaAdmin.NewTopics;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
@@ -17,8 +18,10 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 public class KafkaProducerConfig {
 	
 	@Bean
-    public NewTopic createTopic(){
-        return new NewTopic("kafka-producer", 3, (short) 1);
+    public NewTopics createTopic(){
+		NewTopic [] topics = {new NewTopic("kafka-producer-msg", 3, (short) 1),
+				new NewTopic("kafka-producer-event", 5, (short) 1)};
+		return new NewTopics(topics);
     }
 	
 	@Bean

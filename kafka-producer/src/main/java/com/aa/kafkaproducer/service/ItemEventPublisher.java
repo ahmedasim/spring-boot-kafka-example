@@ -18,14 +18,12 @@ public class ItemEventPublisher {
 	
 	public void sendEventsToTopic(InventoryItemDto dto) {
         try {
-            CompletableFuture<SendResult<String, Object>> future = kt.send("kafka-producer", dto);
+            CompletableFuture<SendResult<String, Object>> future = kt.send("kafka-producer-msg", dto);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    System.out.println("Sent message=[" + dto.toString() +
-                            "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                	System.out.println("Sent message=[" + dto.toString() +"] with offset=[" + result.getRecordMetadata().offset() + "] and partition=[" + result.getRecordMetadata().partition() + "]");
                 } else {
-                    System.out.println("Unable to send message=[" +
-                    		dto.toString() + "] due to : " + ex.getMessage());
+                	System.out.println("Unable to send message=[" + dto.toString() + "] due to : " + ex.getMessage());
                 }
             });
 
@@ -35,7 +33,7 @@ public class ItemEventPublisher {
     }
 
 	public void sendMessageToTopic(String msg) {
-		CompletableFuture<SendResult<String, Object>> future = kt.send("kafka-producer", msg);
+		CompletableFuture<SendResult<String, Object>> future = kt.send("kafka-producer-event", msg);
         future.whenComplete((result,ex)->{
             if (ex == null) {
                 System.out.println("Sent message=[" + msg +"] with offset=[" + result.getRecordMetadata().offset() + "] and partition=[" + result.getRecordMetadata().partition() + "]");
