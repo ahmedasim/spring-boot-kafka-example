@@ -19,14 +19,13 @@ public class ItemEventController {
 	@Autowired
 	private ItemEventPublisher publisher;
 	
-	
 	@PostMapping("/publish/{msg}")
     public ResponseEntity<?> publishMessage(@PathVariable String msg) {
         try {
-            for (int i = 0; i <= 10000; i++) {
+            for (int i = 0; i <= 10; i++) {
                 publisher.sendMessageToTopic(msg + " -> " + i);
             }
-            return ResponseEntity.ok("10000 messages published to kafka successfully ..");
+            return ResponseEntity.ok("10 messages published to kafka successfully ..");
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
@@ -34,8 +33,14 @@ public class ItemEventController {
     }
 	
 	@PostMapping("/publish")
-    public void sendEvents(@RequestBody InventoryItemDto dto) {
-        publisher.sendEventsToTopic(dto);
+    public ResponseEntity<?> sendEvents(@RequestBody InventoryItemDto dto) {
+		 try {
+			 publisher.sendEventsToTopic(dto);
+			 return ResponseEntity.ok("Entity message published to kafka successfully ..");
+		 } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+		 }
     }
 
 }
